@@ -4,9 +4,7 @@ import XCTest
 final class NestedTestTests: XCTestCase {
 
     func testNestedTestsRunInIsolation() throws {
-
-        try nestTests("Nested tests should run in isolation") {
-
+        try nestTests("Nested tests run in isolation") {
             var events = Array<String>()
             events.append("root")
             
@@ -38,38 +36,25 @@ final class NestedTestTests: XCTestCase {
     }
 
     func testAllNestedTestsAreRun() throws {
-        var log = Array<String>()
+        
+        // You must avoid a test using state that is declared outside of `nestTests` because NestTests
+        // can't provide isolation of such state between tests.
+        //
+        // This is a test of `nestTests` itself, for which external state needs to be used.
+        //
+        var leafLog = Array<String>()
 
         try nestTests("all nested tests are run") {
-            log.append("root")
-            
-            return .nest("nest1") {
-                log.append("nest1")
-                
-                return .leaf("leaf11") {
-                    log.append("leaf11")
-                }
-                .leaf("leaf12") {
-                    log.append("leaf12")
-                }
+            .nest("nest1") {
+                .leaf("leaf11") { leafLog.append("leaf11") }
+                .leaf("leaf12") { leafLog.append("leaf12") }
             }
             .nest("nest 2") {
-                log.append("nest2")
-                
-                return .leaf("leaf21") {
-                    log.append("leaf21")
-                }
-                .leaf("leaf22") {
-                    log.append("leaf22")
-                }
+                .leaf("leaf21") { leafLog.append("leaf21") }
+                .leaf("leaf22") { leafLog.append("leaf22") }
             }
         }
         
-        XCTAssertEqual(log, [
-            "root", "nest1", "leaf11",
-            "root", "nest1", "leaf12",
-            "root", "nest2", "leaf21",
-            "root", "nest2", "leaf22",
-        ])
+        XCTAssertEqual(leafLog, ["leaf11", "leaf12", "leaf21", "leaf22"])
     }
 }
