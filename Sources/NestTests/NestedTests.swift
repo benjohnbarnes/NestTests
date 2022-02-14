@@ -25,13 +25,15 @@ struct NestedTest {
     }
     
     private func runAll(remakeMe: () throws -> NestedTest) throws {
-        let children = try testFactory().tests
-        let indices = children.indices
-        
-        for index in indices {
-            let child = (index == indices.first ? children : try remakeMe().testFactory().tests)[index]
-            let remakeChild = { try remakeMe().testFactory().tests[index] }
-            try child.runAll(remakeMe: remakeChild)
+        try XCTContext.runActivity(named: description) { _ in
+            let children = try testFactory().tests
+            let indices = children.indices
+            
+            for index in indices {
+                let child = (index == indices.first ? children : try remakeMe().testFactory().tests)[index]
+                let remakeChild = { try remakeMe().testFactory().tests[index] }
+                try child.runAll(remakeMe: remakeChild)
+            }
         }
     }
 }
