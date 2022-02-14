@@ -1,4 +1,4 @@
-import Behave
+import NestTests
 import XCTest
 
 final class NestedTestTests: XCTestCase {
@@ -6,7 +6,7 @@ final class NestedTestTests: XCTestCase {
     func testNestedTest() throws {
         var log = Array<String>()
 
-        try nestedTest("some simple test") {
+        try nestTests("some simple test") {
             log.append("root")
             
             return .nest("nest1") {
