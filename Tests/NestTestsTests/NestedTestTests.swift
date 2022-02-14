@@ -5,31 +5,31 @@ final class NestedTestTests: XCTestCase {
 
     func testNestedTestsRunInIsolation() throws {
 
-        try nestTests("nested test run in isolation") {
+        try nestTests("Nested tests should run in isolation") {
 
             var events = Array<String>()
             events.append("root")
             
-            return .nest("nest1") {
+            return .nest("Nest 1") {
                 events.append("nest1")
                 
-                return .leaf("leaf11") {
+                return .leaf("Leaf 1 1") {
                     events.append("leaf11")
                     XCTAssertEqual(events, ["root", "nest1", "leaf11"])
                 }
-                .leaf("leaf12") {
+                .leaf("Leaf 1 2") {
                     events.append("leaf12")
                     XCTAssertEqual(events, ["root", "nest1", "leaf12"])
                 }
             }
-            .nest("nest 2") {
+            .nest("Nest 2") {
                 events.append("nest2")
                 
-                return .leaf("leaf21") {
+                return .leaf("Leaf 2 1") {
                     events.append("leaf21")
                     XCTAssertEqual(events, ["root", "nest2", "leaf21"])
                 }
-                .leaf("leaf22") {
+                .leaf("Leaf 2 2") {
                     events.append("leaf22")
                     XCTAssertEqual(events, ["root", "nest2", "leaf22"])
                 }
