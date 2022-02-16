@@ -20,8 +20,8 @@ struct NestedTest {
             let indices = children.indices
             
             for index in indices {
-                let child = (index == indices.first ? children : try remakeMe().testFactory().tests)[index]
-                let remakeChild = { try remakeMe().testFactory().tests[index] }
+                func remakeChild() throws -> NestedTest { try remakeMe().testFactory().tests[index] }
+                let child = (index == indices.first) ? children[index] : try remakeChild()
                 try child.runAll(remakeMe: remakeChild)
             }
         }
