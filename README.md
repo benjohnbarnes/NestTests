@@ -12,6 +12,8 @@ repetition, step sharing provides meaningful grouping in tests, helping them to 
 
 ### Inspiration
 
-The core idea here is inspired by the Quick testing framework, but NestTests takes a very different approach.
+The core idea here is inspired by the [Quick](https://github.com/Quick/Quick) testing framework, but NestTests
+takes a quite different approach.
+
 NestTests relies on Swift's first class functions and their capacity to close over and capture state. By using
 this facility, tests can be written in a fluid and natural way, while guaranteeing they run in isolation.
