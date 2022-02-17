@@ -4,30 +4,32 @@ import XCTest
 final class NestedTestTests: XCTestCase {
 
     func testNestedTestsRunInIsolation() throws {
+
         try nestTests("Nested tests run in isolation") {
+            
             var events = Array<String>()
             events.append("root")
             
-            return .nest("Nest 1") {
+            return .when("Nest 1") {
                 events.append("nest1")
                 
-                return .leaf("Leaf 1 1") {
+                return .then("Leaf 1 1") {
                     events.append("leaf11")
                     XCTAssertEqual(events, ["root", "nest1", "leaf11"])
                 }
-                .leaf("Leaf 1 2") {
+                .then("Leaf 1 2") {
                     events.append("leaf12")
                     XCTAssertEqual(events, ["root", "nest1", "leaf12"])
                 }
             }
-            .nest("Nest 2") {
+            .when("Nest 2") {
                 events.append("nest2")
                 
-                return .leaf("Leaf 2 1") {
+                return .then("Leaf 2 1") {
                     events.append("leaf21")
                     XCTAssertEqual(events, ["root", "nest2", "leaf21"])
                 }
-                .leaf("Leaf 2 2") {
+                .then("Leaf 2 2") {
                     events.append("leaf22")
                     XCTAssertEqual(events, ["root", "nest2", "leaf22"])
                 }
@@ -45,16 +47,18 @@ final class NestedTestTests: XCTestCase {
         var leafLog = Array<String>()
 
         try nestTests("all nested tests are run") {
-            .nest("nest1") {
-                .leaf("leaf11") { leafLog.append("leaf11") }
-                .leaf("leaf12") { leafLog.append("leaf12") }
+            .when("nest1") {
+                .then("leaf11") { leafLog.append("leaf11") }
+                .then("leaf12") { leafLog.append("leaf12") }
             }
-            .nest("nest 2") {
-                .leaf("leaf21") { leafLog.append("leaf21") }
-                .leaf("leaf22") { leafLog.append("leaf22") }
+            .when("nest 2") {
+                .then("leaf21") { leafLog.append("leaf21") }
+                .then("leaf22") { leafLog.append("leaf22") }
             }
         }
         
         XCTAssertEqual(leafLog, ["leaf11", "leaf12", "leaf21", "leaf22"])
     }
 }
+
+

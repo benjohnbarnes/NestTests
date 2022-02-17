@@ -9,23 +9,23 @@ public struct NestedTests {
     }
     
     /// A test step with further nested test steps.
-    public static func nest(_ description: String, _ body: @escaping () throws -> NestedTests) -> NestedTests {
-        NestedTests().nest(description, body)
+    public static func when(_ description: String, _ body: @escaping () throws -> NestedTests) -> NestedTests {
+        NestedTests().when(description, body)
     }
     
     /// A test step with no further nested steps.
-    public static func leaf(_ description: String, _ body: @escaping () throws -> Void) -> NestedTests {
-        NestedTests().leaf(description, body)
+    public static func then(_ description: String, _ body: @escaping () throws -> Void) -> NestedTests {
+        NestedTests().then(description, body)
     }
     
     /// A test step with further nested test steps.
-    public func nest(_ description: String, _ body: @escaping () throws -> NestedTests) -> NestedTests {
+    public func when(_ description: String, _ body: @escaping () throws -> NestedTests) -> NestedTests {
         let test = NestedTest(description: description, testFactory: body)
         return NestedTests(tests: tests + [test])
     }
     
     /// A test step with no further nested steps.
-    public func leaf(_ description: String, _ body: @escaping () throws -> Void) -> NestedTests {
+    public func then(_ description: String, _ body: @escaping () throws -> Void) -> NestedTests {
         let test = NestedTest(description: description) { try body(); return NestedTests() }
         return NestedTests(tests: tests + [test])
     }
