@@ -9,8 +9,8 @@ public struct NestedTests {
     }
     
     /// A test step with further nested test steps.
-    public static func when(_ description: String, _ body: @escaping () throws -> NestedTests) -> NestedTests {
-        NestedTests().when(description, body)
+    public static func context(_ description: String, _ body: @escaping () throws -> NestedTests) -> NestedTests {
+        NestedTests().context(description, body)
     }
     
     /// A test step with no further nested steps.
@@ -19,7 +19,7 @@ public struct NestedTests {
     }
     
     /// A test step with further nested test steps.
-    public func when(_ description: String, _ body: @escaping () throws -> NestedTests) -> NestedTests {
+    public func context(_ description: String, _ body: @escaping () throws -> NestedTests) -> NestedTests {
         let test = NestedTest(description: description, testFactory: body)
         return NestedTests(tests: tests + [test])
     }

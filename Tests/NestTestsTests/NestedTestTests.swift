@@ -10,28 +10,29 @@ final class NestedTestTests: XCTestCase {
             var events = Array<String>()
             events.append("root")
             
-            return .when("Nest 1") {
-                events.append("nest1")
+            return .context("message11 is appended") {
+                events.append("message11")
                 
-                return .then("Leaf 1 1") {
-                    events.append("leaf11")
-                    XCTAssertEqual(events, ["root", "nest1", "leaf11"])
+                return .context("message21 is appended") {
+                    events.append("message21")
+
+                    return .then("messages are [root, message11, message21]") {
+                        XCTAssertEqual(events, ["root", "message11", "message21"])
+                    }
                 }
-                .then("Leaf 1 2") {
-                    events.append("leaf12")
-                    XCTAssertEqual(events, ["root", "nest1", "leaf12"])
+                .context("message22 is appended") {
+                    events.append("message22")
+                    
+                    return .then("messages are [root, message11, message22]") {
+                        XCTAssertEqual(events, ["root", "message11", "message22"])
+                    }
                 }
             }
-            .when("Nest 2") {
-                events.append("nest2")
+            .context("message21 is appended") {
+                events.append("message21")
                 
-                return .then("Leaf 2 1") {
-                    events.append("leaf21")
-                    XCTAssertEqual(events, ["root", "nest2", "leaf21"])
-                }
-                .then("Leaf 2 2") {
-                    events.append("leaf22")
-                    XCTAssertEqual(events, ["root", "nest2", "leaf22"])
+                return .then("messages are [root, message21") {
+                    XCTAssertEqual(events, ["root", "message21"])
                 }
             }
         }
@@ -47,11 +48,11 @@ final class NestedTestTests: XCTestCase {
         var leafLog = Array<String>()
 
         try nestTests("all nested tests are run") {
-            .when("nest1") {
+            .context("nest1") {
                 .then("leaf11") { leafLog.append("leaf11") }
                 .then("leaf12") { leafLog.append("leaf12") }
             }
-            .when("nest 2") {
+            .context("nest 2") {
                 .then("leaf21") { leafLog.append("leaf21") }
                 .then("leaf22") { leafLog.append("leaf22") }
             }
